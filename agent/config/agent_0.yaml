@@ -1,0 +1,6 @@
+---
+# apply extra security hardening profile to achieve CIS compliance
+profile: cis
+node-label+:
+  # mark the node to allow using servicelb load balancer controller
+  - "svccontroller.k3s.cattle.io/enablelb=true"

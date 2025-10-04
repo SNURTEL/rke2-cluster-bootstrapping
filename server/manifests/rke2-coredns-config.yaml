@@ -1,0 +1,13 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: rke2-coredns
+  namespace: kube-system
+spec:
+  # enabled - enable NodeLocal DNSCache
+  # use_cilium_lrp - configure Cilium localRedirectPolicy to redirect DNS traffic to NodeLocal DNSCache
+  valuesContent: |-
+    nodelocal:
+      enabled: true
+      use_cilium_lrp: true

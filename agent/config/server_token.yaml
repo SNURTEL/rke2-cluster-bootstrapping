@@ -1,0 +1,3 @@
+---
+server: server.cluster.local
+token: <TOKEN>
