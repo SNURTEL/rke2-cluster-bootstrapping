@@ -1,0 +1,17 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: rancher
+  namespace: kube-system
+spec:
+  chart: rancher
+  repo: https://releases.rancher.com/server-charts/stable
+  targetNamespace: cattle-system
+  createNamespace: true
+  # todo kubectl logs deployment/rancher -n cattle-system
+  # https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/psa-config-templates#exempting-required-rancher-namespaces
+  valuesContent: |-
+    bootstrapPassword: admin
+    hostname: virtualbox.local
+    replicas: -1

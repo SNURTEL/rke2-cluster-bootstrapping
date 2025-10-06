@@ -2,9 +2,10 @@
 
 This repo provides a guide to bootstrapping an RKE2 ([Rancher Kubernetes Engine](https://docs.rke2.io/)) cluster with a few sensible defaults:
 
-- Cilium CNI with WireGuard tunnelling, kube-proxy replacement and Hubble observability
+- Cilium CNI with WireGuard tunnelling, kube-proxy replacement
+- Rancher cluster management
+- Hubble network observability
 - CSI compliance by default
-- DNS NodeLocal Cache
 - ServiceLB load balancer controller
 
 You can try it out using VirtualBox. Please note that some practices presented here would be at least questionable in a production environment (limited host hardening, self-signed control plane certs), but were simplified since they will strongly differ depending on environment configuration.
@@ -30,7 +31,14 @@ Create four VMs with the following resources (specs taken from the awesome [Kube
 | node-0  | Kubernetes worker node | 1   | 4GB   | 20GB    |
 | node-1  | Kubernetes worker node | 1   | 4GB   | 20GB    |
 
-- Do not specify an ISO image and use the VDI file as volume. Create a NAT network and attach a NAT-network interface to each VM. If you prefer not to use the VirtualBox terminal window, also attach a host-only interface to the jumpbox.
+- Do not specify an ISO image and use the VDI file as volume. Create a NAT network and two Host-only networks and attach network interfaces to VMs as follows:
+
+| Name    | Interfaces                                |
+|---------|-------------------------------------------|
+| jumpbox | NAT network, Host-only 1 (for SSH access) |
+| server  | NAT network                               |
+| node-0  | NAT network, Host-only 2 (for ingress)    |
+| node-1  | NAT network                               |
 
 - Boot all machines, login as `root` with no password using the VirtualBox terminal. Configure SSH access on all machines:
 
@@ -101,7 +109,10 @@ mkdir -p /var/lib/rancher/rke2/server/manifests/
 vim /var/lib/rancher/rke2/server/manifests/rke2-cilium-config.yaml
 vim /var/lib/rancher/rke2/server/manifests/rke2-coredns-config.yaml
 vim /var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml
+# continue for every file in `server/manifests`
 ```
+
+Copy the `server/rke2-pss-override.yaml` file to `/etc/rancher/rke2/rke2-pss-override.yaml` (needed to configure namespace exemptions, you will have a bad time installing anything without them).
 
 Enable and start the service, check logs to see if everything looks good:
 
@@ -148,6 +159,8 @@ ssh root@node-$NODE_NUM mkdir -p /etc/rancher/rke2/config.yaml.d
 scp 01-server-token.yaml root@node-$NODE_NUM:/etc/rancher/rke2/config.yaml.d/01-server-token.yaml
 ssh -t root@node-$NODE_NUM vim /etc/rancher/rke2/config.yaml.d/00-agent-$NODE_NUM.yaml
 ```
+
+**NOTE** since `node-0` is configured as ingress, you will need to modify `agent/config/agent_0.yaml` and replace `node-external-ip` with IP bound to VM's Host-only interface. Also, add the same IP to your `/etc/hosts` as `virtualbox.local` - then you should be able to access Rancher at `https://virtualbox.local`.
 
 - Connect to the node:
 

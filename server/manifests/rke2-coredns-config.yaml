@@ -9,5 +9,5 @@ spec:
   # use_cilium_lrp - configure Cilium localRedirectPolicy to redirect DNS traffic to NodeLocal DNSCache
   valuesContent: |-
     nodelocal:
-      enabled: true
-      use_cilium_lrp: true
+      enabled: false
+    #   use_cilium_lrp: true

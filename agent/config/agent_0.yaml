@@ -4,3 +4,4 @@ profile: cis
 node-label+:
   # mark the node to allow using servicelb load balancer controller
   - "svccontroller.rke2.cattle.io/enablelb=true"
+node-external-ip: 192.168.57.3
