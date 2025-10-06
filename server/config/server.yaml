@@ -10,7 +10,7 @@ cluster-domain: cluster.local
 disable-kube-proxy: "true"
 node-label+:
   # mark the node to allow using servicelb load balancer controller
-  - "svccontroller.k3s.cattle.io/enablelb=true"
+  - "svccontroller.rke2.cattle.io/enablelb=true"
 # node-taint+:
   # prevent scheduling regular workloads on the server node
   # - "CriticalAddonsOnly=true:NoExecute"

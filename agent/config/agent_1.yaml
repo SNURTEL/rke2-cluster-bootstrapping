@@ -3,4 +3,4 @@
 profile: cis
 node-label+:
   # mark the node to allow using servicelb load balancer controller
-  - "svccontroller.k3s.cattle.io/enablelb=true"
+  - "svccontroller.rke2.cattle.io/enablelb=true"

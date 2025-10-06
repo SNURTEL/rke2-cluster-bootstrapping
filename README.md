@@ -189,8 +189,8 @@ systemctl status rke2-agent
 SSH to the server host and utilize the generated kubeconfig:
 
 ```shell
-export KUBECONFIG=/etc/rancher/rke2/rke2.yaml rke2.yaml
-export PATH=$PATH:/var/lib/rancher/rke2/bin/rke2/bin
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+export PATH=$PATH:/var/lib/rancher/rke2/bin
 ```
 
 Then:
