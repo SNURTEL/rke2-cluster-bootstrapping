@@ -1,0 +1,38 @@
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+
+# SSH keys
+*.pem
+*.key
+id_rsa*
+*.pub
+
+# Secrets and tokens
+*token*
+*secret*
+.env
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# VirtualBox files
+*.vdi
+*.vmdk
+*.vbox
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

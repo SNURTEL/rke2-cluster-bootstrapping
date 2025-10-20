@@ -55,3 +55,4 @@ plugins:
         - rancher-alerting-drivers
         - security-scan
         - tigera-operator
+        - argocd

@@ -1,0 +1,45 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: argocd
+  namespace: kube-system
+spec:
+  chart: argo-cd
+  repo: https://argoproj.github.io/argo-helm
+  targetNamespace: argocd
+  createNamespace: true
+  version: 7.6.12
+  valuesContent: |-
+    global:
+      domain: argocd.virtualbox.local
+
+    configs:
+      params:
+        server.insecure: true
+
+    server:
+      service:
+        type: LoadBalancer
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - argocd.virtualbox.local
+        tls:
+          - secretName: argocd-server-tls
+            hosts:
+              - argocd.virtualbox.local
+
+    # For HA mode, increase replicas
+    controller:
+      replicas: 1
+
+    server:
+      replicas: 1
+
+    repoServer:
+      replicas: 1
+
+    applicationSet:
+      replicas: 1

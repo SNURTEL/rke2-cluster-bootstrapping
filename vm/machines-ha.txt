@@ -1,0 +1,12 @@
+# HA Mode machines configuration
+# Format: IP FQDN HOSTNAME SUBNET
+# Uncomment the servers you want to use for HA mode
+
+# Server nodes (minimum 3 for HA)
+10.0.2.6 server-0.kubernetes.local server-0
+10.0.2.10 server-1.kubernetes.local server-1
+10.0.2.11 server-2.kubernetes.local server-2
+
+# Worker nodes
+10.0.2.7 node-0.kubernetes.local node-0 10.200.0.0/24
+10.0.2.8 node-1.kubernetes.local node-1 10.200.1.0/24

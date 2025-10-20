@@ -1,0 +1,55 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: grafana
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 8.5.2
+    helm:
+      releaseName: grafana
+      values: |
+        adminPassword: admin
+        service:
+          type: LoadBalancer
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+              - name: Loki
+                type: loki
+                url: http://loki-gateway.lgtm-stack.svc.cluster.local
+                access: proxy
+                isDefault: false
+              - name: Tempo
+                type: tempo
+                url: http://tempo.lgtm-stack.svc.cluster.local:3100
+                access: proxy
+                isDefault: false
+              - name: Mimir
+                type: prometheus
+                url: http://mimir-gateway.lgtm-stack.svc.cluster.local/prometheus
+                access: proxy
+                isDefault: true
+        ingress:
+          enabled: true
+          ingressClassName: nginx
+          hosts:
+            - grafana.virtualbox.local
+          tls:
+            - secretName: grafana-tls
+              hosts:
+                - grafana.virtualbox.local
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lgtm-stack
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

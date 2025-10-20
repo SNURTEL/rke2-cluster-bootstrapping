@@ -1,0 +1,29 @@
+# HA Mode Configuration for additional RKE2 Server Nodes (server-1, server-2, etc.)
+# Join an existing cluster
+
+# permissions for generated kubeconfig
+write-kubeconfig-mode: "0600"
+# CNI plugin to use (default is flannel)
+cni: cilium
+# enable servicelb load balancer controller for bare metal installation
+enable-servicelb: true
+# apply extra security hardening profile to achieve CIS compliance
+profile: cis
+cluster-domain: cluster.local
+disable-kube-proxy: "true"
+# Join the first server node
+server: https://server-0:9345
+# Token will be in /var/lib/rancher/rke2/server/node-token on server-0
+token: <TOKEN>
+node-label+:
+  # mark the node to allow using servicelb load balancer controller
+  - "svccontroller.rke2.cattle.io/enablelb=true"
+node-taint+:
+  # prevent scheduling regular workloads on the server nodes in HA mode
+  - "CriticalAddonsOnly=true:NoExecute"
+tls-san+:
+  - server.cluster.local
+  - server-0.cluster.local
+  - server-1.cluster.local
+  - server-2.cluster.local
+pod-security-admission-config-file: /etc/rancher/rke2/rke2-pss-override.yaml

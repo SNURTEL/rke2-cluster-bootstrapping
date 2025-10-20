@@ -1,0 +1,35 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rancher
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: rancher
+    repoURL: https://releases.rancher.com/server-charts/stable
+    targetRevision: 2.9.2
+    helm:
+      releaseName: rancher
+      values: |
+        bootstrapPassword: admin
+        hostname: virtualbox.local
+        replicas: 3
+        # For HA mode
+        tls: ingress
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cattle-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  # Ensure cert-manager is installed first
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
