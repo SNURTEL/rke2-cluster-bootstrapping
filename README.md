@@ -543,3 +543,33 @@ This setup is optimized for learning and testing. For production deployments:
    - Use ArgoCD Projects for multi-tenancy
    - Configure webhook-based sync for faster deployments
 
+## Testing
+
+Run the validation tests to ensure all configurations are correct:
+
+```shell
+./test-setup.sh
+```
+
+This will validate:
+- File existence and structure
+- YAML syntax
+- Shell script syntax
+- ArgoCD configuration
+- PSS override settings
+- HA configuration
+- Documentation completeness
+
+## Contributing
+
+Contributions are welcome! Please ensure:
+1. All YAML files pass `yamllint -d relaxed`
+2. Shell scripts pass `shellcheck` and `bash -n`
+3. Run `./test-setup.sh` before submitting
+4. Update documentation for any configuration changes
+5. Test changes in a VM environment when possible
+
+## License
+
+This project is for educational purposes. Use at your own risk.
+
